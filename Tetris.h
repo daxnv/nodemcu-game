@@ -18,7 +18,7 @@ private:
 
 class Piece {
 public:
-    Piece(int8_t id, IntVec IntVec, int8_t rotation);
+    Piece(int8_t id, IntVec start_pos, int8_t rotation);
     void rotate();
     void move(IntVec by);
     IntVec operator[](size_t i);

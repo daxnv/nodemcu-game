@@ -42,7 +42,7 @@ y-Koordinate der Nummern
  01 01|10 10 = 0x5a
 */
 
-Piece::Piece(int8_t id, IntVec IntVec, int8_t rotation) : _id(id % 7), _off(IntVec), _rot(rotation % 4) {
+Piece::Piece(int8_t id, IntVec start_pos, int8_t rotation) : _id(id % 7), _off(start_pos), _rot(rotation % 4) {
 }
 
 void Piece::rotate() {
@@ -54,9 +54,9 @@ void Piece::move(IntVec by) {
 }
 
 IntVec Piece::operator[](size_t i) {
-    IntVec{array<int, (std::size_t)2UL>{(int)0, (int)0}};
-    vec[0] = get<0>(storage[_id])[_rot][0] >> 2*i;
-    vec[1] = get<0>(storage[_id])[_rot][1] >> 2*i;
-    return _off + vec;
+    return IntVec{
+        get<0>(storage[_id])[_rot][0] >> 2*i & 0x3,
+        get<0>(storage[_id])[_rot][1] >> 2*i & 0x3
+    } += _off;
 }
 

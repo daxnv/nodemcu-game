@@ -8,7 +8,10 @@
 template<typename Type, std::size_t Size>
 class Vector : public std::array<Type, Size> {
 public:
-    using array();
+    template<typename ...I>
+    Vector(I... inits) : std::array{inits...} {
+
+    }
     
     Vector operator+(const Vector &other) const {
         return binary_op(other, std::plus)
