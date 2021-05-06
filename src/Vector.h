@@ -12,13 +12,13 @@ public:
     Vector(I... inits) : std::array{inits...} {
 
     }
-    
+
     Vector operator+(const Vector &other) const {
-        return binary_op(other, std::plus)
+        return binary_op(other, std::plus);
     }
 
     Vector operator-(const Vector &) const {
-        return binary_op(other, std::minus)
+        return binary_op(other, std::minus);
     }
 
     Vector operator-() const {
