@@ -1,4 +1,4 @@
-#include "input.h"
+#include "Input.h"
 
 MPU9250 Sensor(Wire,0x68);
 
