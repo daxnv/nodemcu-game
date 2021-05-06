@@ -8,16 +8,17 @@
 template<typename Type, std::size_t Size>
 class Vector : public std::array<Type, Size> {
 public:
-    Vector(Type ...inits) : std::array{inits,...} {
+    template<typename ...I>
+    Vector(I... inits) : std::array{inits...} {
 
     }
-    
+
     Vector operator+(const Vector &other) const {
-        return binary_op(other, std::plus)
+        return binary_op(other, std::plus);
     }
 
     Vector operator-(const Vector &) const {
-        return binary_op(other, std::minus)
+        return binary_op(other, std::minus);
     }
 
     Vector operator-() const {

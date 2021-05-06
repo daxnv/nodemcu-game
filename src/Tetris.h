@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <array>
 #include "Vector.h"
+#include <TFT_eSPI.h>
 
 using IntVec = Vector<int,2>;
 
@@ -31,6 +32,13 @@ private:
 
 class Board {
 public:
+    static constexpr size_t width = 12;
+    static constexpr size_t height = 40;
+    bool collision(Piece piece);
+    int delete_lines();
+    void addPiece(Piece piece);
+private:
+    std::array<std::array<Block, height>, width> _board;
 };
  
 #endif //_TETRIS_H

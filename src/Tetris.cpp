@@ -1,6 +1,6 @@
 #include "Tetris.h"
 #include <tuple>
-
+#include <TFT_eSPI.h>
 using namespace std;
 
 Block::Block(uint16_t color) : _color(color) {
@@ -54,9 +54,8 @@ void Piece::move(IntVec by) {
 }
 
 IntVec Piece::operator[](size_t i) {
-    IntVec{array<int, (std::size_t)2UL>{(int)0, (int)0}};
-    vec[0] = get<0>(storage[_id])[_rot][0] >> 2*i;
-    vec[1] = get<0>(storage[_id])[_rot][1] >> 2*i;
-    return _off + vec;
+    return IntVec{
+            get<0>(storage[_id])[_rot][0] >> 2*i & 0x3,
+            get<0>(storage[_id])[_rot][1] >> 2*i & 0x3
+    } += _off;
 }
-
