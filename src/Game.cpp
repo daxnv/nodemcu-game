@@ -24,10 +24,18 @@ Game::Game() :
 }
 
 void Game::cycle() {
-    if (_board.collision(_piece.moved({0,1}))) {
+    Piece moved_piece = _piece.moved({0,1});
+    if (_board.collision(moved_piece)) {
         _board.addPiece(_piece);
+
         int n = _board.deleteLines();
         _points += n * n;
+
+        _piece = moveToStart(_preview);
+        _preview = random_piece();
+    }
+    else {
+        _piece = moved_piece;
     }
 }
 
