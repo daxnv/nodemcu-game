@@ -16,6 +16,9 @@ bool Block::empty() const {
 }
 
 Block &Board::at(IntVec at) {
+    if (at[0] < 0 || width <= at[0] ||
+        at[1] < 0 || height <= at[1])
+        return {TFT_WHITE};
     return _board[at[1]][at[0]];
 }
 
