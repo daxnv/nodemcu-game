@@ -2,8 +2,8 @@
 // Created by dan on 10.05.21.
 //
 
-#ifndef NODEMCU_GAME_PIECE_H
-#define NODEMCU_GAME_PIECE_H
+#ifndef _PIECE_H
+#define _PIECE_H
 
 #include <cstdint>
 #include "Vector.h"
@@ -24,4 +24,4 @@ private:
     int8_t _rot;
 };
 
-#endif //NODEMCU_GAME_PIECE_H
+#endif //_PIECE_H
