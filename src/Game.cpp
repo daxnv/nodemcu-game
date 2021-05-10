@@ -1,4 +1,9 @@
 #include "Game.h"
+
+#ifdef abs
+#undef abs
+#endif
+
 #include <random>
 
 using namespace std;
