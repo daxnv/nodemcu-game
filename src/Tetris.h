@@ -8,7 +8,7 @@
 
 class Block {
 public:
-    explicit Block(uint16_t color = TFT_BLACK);
+    Block(uint16_t color = TFT_BLACK);
     void set(uint16_t color);
     bool empty() const;
 private:
