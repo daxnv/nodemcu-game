@@ -5,6 +5,7 @@
 #endif
 
 #include <random>
+#include <PolledTimeout.h>
 
 using namespace std;
 
@@ -61,4 +62,21 @@ void Game::cycleUser() {
 
 Piece &Game::moveToStart(Piece piece) {
     return piece.move({_start_pos, 0});
+}
+
+using Clock = esp8266::polledTimeout::periodicFastMs;
+Clock user_cycle(31); // 1/32 = 0.03125
+
+void Game::loop() {
+    Clock down_cycle(1000);
+    while (!_board.isFull()) {
+        while (!down_cycle) {
+            if (user_cycle) {
+                _controller.measure();
+                cycleUser();
+            }
+        }
+        down_cycle.reset(1000 - _counter);
+        cycleDown();
+    }
 }

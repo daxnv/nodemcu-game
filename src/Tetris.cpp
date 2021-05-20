@@ -40,7 +40,7 @@ int Board::deleteLines() {
 
 bool Board::collision(Piece piece) {
     for (int i=0; i<4; ++i)
-        if (!at(piece[i]).empty())
+        if (!getAt(piece[i]).empty())
             return true;
 
     return false;
@@ -50,4 +50,13 @@ void Board::addPiece(Piece piece) {
     for (int i=0; i<4; ++i){
         at(piece[i]) = Block(piece.color());
     }
+}
+
+bool Board::isFull() {
+    auto line_full = [](Line line) { //gibt nicht zurück ob Zeile ganz voll, sondern
+        return any_of(line.begin(), line.end(), //ob ein Block der Zeile
+                      [](const Block &block) {return !block.empty();} //nicht leer ist
+        );
+    };
+    return any_of(_board.rend(), _board.rend()+2, line_full);
 }

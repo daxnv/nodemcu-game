@@ -24,6 +24,7 @@ public:
     void addPiece(Piece piece);
     Block &at(IntVec at);
     Block getAt(IntVec at);
+    bool isFull();
 private:
     using Line = std::array<Block, width>;
     // _board[y][x]

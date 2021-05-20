@@ -7,9 +7,11 @@
 class Game {
 public:
     Game();
-    void levelUp();
     void cycleDown();
     void cycleUser();
+    void levelUp();
+    void loop();
+    void go();
 private:
     static Piece &moveToStart(Piece piece);
 
