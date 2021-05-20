@@ -10,10 +10,12 @@ void init_mpu();
 
 class Input {
 public:
+    Input();
+    void measure();
     int shift();
     bool rotate();
 private:
-    ;
+    bool last_was_rot;
 };
 
 #endif //_INPUT
