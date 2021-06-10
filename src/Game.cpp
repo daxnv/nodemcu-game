@@ -17,6 +17,7 @@ Piece random_piece() {
 }
 
 Game::Game() :
+    _controller(),
     _piece(moveToStart(random_piece())),
     _preview(random_piece()),
     _board(),
@@ -49,7 +50,7 @@ void Game::levelUp() {
 void Game::cycleUser() {
     Piece changed_piece = _piece;
 
-    if (_controller.rotate())
+    if (_controller.rotation())
         changed_piece.rotate();
 
     IntVec shift{0,0};
@@ -79,4 +80,38 @@ void Game::loop() {
         down_cycle.reset(1000 - _counter);
         cycleDown();
     }
+}
+
+Game::Input::Input() :
+    Sensor(Wire, 0x68),
+    last_was_rot(false)
+{
+    Sensor.begin();                                      // Sensor wird initialisiert, eine aufwendigere Lösung
+    // findet sich in den Beispieldateien der library
+    Sensor.setAccelRange(MPU9250::ACCEL_RANGE_8G);       // Setzt den Beschleunigungssensor auf den max. Bereich
+    Sensor.setGyroRange(MPU9250::GYRO_RANGE_500DPS);     // Setzt den Maximalwert düe den Gyrosensor auf +/- 500°/s
+    Sensor.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_20HZ); // Setzt einen Filter für Störfreqnezen bei 20Hz
+    Sensor.setSrd(19);
+}
+
+void Game::Input::measure() {
+    static constexpr float threshold = -3;
+    last_was_rot = Sensor.getGyroX_rads() < threshold;
+    Sensor.readSensor();
+}
+
+int Game::Input::shift() {
+    static constexpr float threshold = 2;
+    float shift = Sensor.getAccelX_mss();
+    if (shift > threshold)
+        return 1;
+    else if (shift < -threshold)
+        return -1;
+    return 0;
+}
+
+bool Game::Input::rotation() {
+    static constexpr float threshold = -3;
+    bool is_rot = Sensor.getGyroX_rads() < threshold;
+    return last_was_rot && last_was_rot != is_rot;
 }

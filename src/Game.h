@@ -2,7 +2,9 @@
 #define _GAME_H
 
 #include "Tetris.h"
-#include "Input.h"
+#include "Wire.h"
+#include "MPU9250.h"
+#include "Tetris.h"
 
 class Game {
 public:
@@ -13,6 +15,18 @@ public:
     void loop();
     void go();
 private:
+
+    class Input {
+    public:
+        Input();
+        void measure();
+        int shift();
+        bool rotation();
+    private:
+        MPU9250 Sensor;
+        bool last_was_rot;
+    };
+
     static Piece &moveToStart(Piece piece);
 
     Input _controller;
