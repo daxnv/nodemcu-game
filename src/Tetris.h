@@ -11,6 +11,7 @@ public:
     Block(uint16_t color = TFT_BLACK);
     void set(uint16_t color);
     bool empty() const;
+    uint16_t color();
 private:
     uint16_t _color;
 };

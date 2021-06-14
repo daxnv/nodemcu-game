@@ -15,6 +15,10 @@ bool Block::empty() const {
     return _color == TFT_BLACK;
 }
 
+uint16_t Block::color() {
+    return _color;
+}
+
 Block &Board::at(IntVec at) {
     return _board[at[1]][at[0]];
 }
