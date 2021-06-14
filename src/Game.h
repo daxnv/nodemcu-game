@@ -2,6 +2,7 @@
 #define _GAME_H
 
 #include "MPU9250.h"
+#include "TFT_eSPI.h"
 #include "Tetris.h"
 #include "Wire.h"
 

@@ -1,4 +1,4 @@
-# 3.30000include "Game.h"
+#include "Game.h"
 
 #ifdef abs
 #undef abs
@@ -78,9 +78,9 @@ void Game::loop() {
 }
 
 Game::Output::Output(int width, int heigh) {
-  tft = TFT_eSPI();
-  // tft.init();
-  // tft.setRotation(2);
+  TFT_eSPI tft = TFT_eSPI();
+  tft.init();
+  tft.setRotation(2);
 }
 
 Game::Input::Input() : Sensor(Wire, 0x68), last_was_rot(false) {
