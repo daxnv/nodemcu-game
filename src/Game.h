@@ -7,7 +7,7 @@
 #include "Wire.h"
 
 class Game {
-    public:
+public:
     Game();
     void cycleDown();
     void cycleUser();
@@ -28,7 +28,7 @@ protected:
         bool last_was_rot;
     };
 
-    static Piece &moveToStart(Piece piece);
+    static Piece &moveToStart(Piece &piece);
 
     Input _controller;
     Piece _piece, _preview;

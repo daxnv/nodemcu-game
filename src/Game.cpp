@@ -57,7 +57,7 @@ void Game::cycleUser() {
     if (!_board.collision(changed_piece)) _piece = changed_piece;
 }
 
-Piece &Game::moveToStart(Piece piece) { return piece.move({_start_pos, 0}); }
+Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }
 
 using Clock = esp8266::polledTimeout::periodicFastMs;
 Clock user_cycle(31);  // 1/32 = 0.03125
@@ -77,6 +77,7 @@ void Game::loop() {
 }
 
 Game::Input::Input() : Sensor(Wire, 0x68), last_was_rot(false) {
+    Wire.begin(D2,D1);
     Sensor.begin();                                      // Sensor wird initialisiert, eine aufwendigere Lösung findet sich in den Beispieldateien der library
     Sensor.setAccelRange(MPU9250::ACCEL_RANGE_8G);       // Setzt den Beschleunigungssensor auf den max. Bereich
     Sensor.setGyroRange(MPU9250::GYRO_RANGE_500DPS);     // Setzt den Maximalwert düe den Gyrosensor auf +/- 500°/s
@@ -112,6 +113,7 @@ Output::Output() :
 {
     tft.init();
     tft.setRotation(2);
+    tft.fillScreen(TFT_BLACK);
 }
 
 void Output::draw() {
