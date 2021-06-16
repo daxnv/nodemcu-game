@@ -58,6 +58,7 @@ void Game::cycleUser() {
 }
 
 Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }
+Piece Game::moveToStart(Piece &&piece) { return piece.move({_start_pos, 0}); }
 
 using Clock = esp8266::polledTimeout::periodicFastMs;
 Clock user_cycle(31);  // 1/32 = 0.03125

@@ -29,6 +29,7 @@ protected:
     };
 
     static Piece &moveToStart(Piece &piece);
+    static Piece moveToStart(Piece &&piece);
 
     Input _controller;
     Piece _piece, _preview;
