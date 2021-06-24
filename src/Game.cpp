@@ -1,21 +1,10 @@
 #include "Game.h"
 
-#ifdef abs
-#undef abs
-#endif
-
 #include <PolledTimeout.h>
 #include <SPI.h>
 #include <TFT_eSPI.h>
 
-#include <random>
-
 using namespace std;
-
-default_random_engine eng;
-uniform_int_distribution<int8_t> from1to7(0, 6);
-
-Piece random_piece() { return {from1to7(eng), {0, 0}, 0}; }
 
 Game::Game() :
     _controller(),

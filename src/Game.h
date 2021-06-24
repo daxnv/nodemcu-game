@@ -52,4 +52,15 @@ private:
     TFT_eSPI tft;
 };
 
+#ifdef abs
+#undef abs
+#endif
+
+#include <random>
+
+inline std::default_random_engine eng;
+inline std::uniform_int_distribution<int8_t> from1to7(0, 6);
+
+inline Piece random_piece() { return {from1to7(eng), {0, 0}, 0}; }
+
 #endif  //_GAME_H
