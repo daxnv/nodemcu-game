@@ -15,7 +15,7 @@ bool Block::empty() const {
     return _color == TFT_BLACK;
 }
 
-uint16_t Block::color() {
+uint16_t Block::color() const {
     return _color;
 }
 
@@ -23,7 +23,7 @@ Block &Board::at(IntVec at) {
     return _board[at[1]][at[0]];
 }
 
-Block Board::getAt(IntVec at) {
+Block Board::getAt(IntVec at) const {
     if (at[0] < 0 || width <= at[0] ||
         at[1] < 0 || height <= at[1])
         return {TFT_WHITE};
@@ -31,7 +31,7 @@ Block Board::getAt(IntVec at) {
 }
 
 int Board::deleteLines() {
-    auto line_full = [](Line line) {
+    auto line_full = [](const Line &line) {
         return all_of(line.begin(), line.end(),
                       [](const Block &block) {return !block.empty();}
         );
@@ -42,7 +42,7 @@ int Board::deleteLines() {
     return _board.end() - new_end;
 }
 
-bool Board::collision(Piece piece) {
+bool Board::collision(const Piece &piece) const {
     for (int i=0; i<4; ++i)
         if (!getAt(piece[i]).empty())
             return true;
@@ -50,14 +50,14 @@ bool Board::collision(Piece piece) {
     return false;
 }
 
-void Board::addPiece(Piece piece) {
+void Board::addPiece(const Piece &piece) {
     for (int i=0; i<4; ++i){
         at(piece[i]) = Block(piece.color());
     }
 }
 
-bool Board::isFull() {
-    auto line_full = [](Line line) { //gibt nicht zurück ob Zeile ganz voll, sondern
+bool Board::isFull() const {
+    auto line_full = [](const Line &line) { //gibt nicht zurück ob Zeile ganz voll, sondern
         return any_of(line.begin(), line.end(), //ob ein Block der Zeile
                       [](const Block &block) {return !block.empty();} //nicht leer ist
         );

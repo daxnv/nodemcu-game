@@ -46,12 +46,12 @@ Piece &Piece::move(IntVec by) {
     return *this;
 }
 
-Piece Piece::moved(IntVec by) {
+Piece Piece::moved(IntVec by) const {
     Piece temp = *this;
     return temp.move(by);
 }
 
-IntVec Piece::operator[](size_t i) {
+IntVec Piece::operator[](size_t i) const {
     return IntVec{
             get<0>(storage[_id])[_rot][0] >> 2*i & 0x3,
             get<0>(storage[_id])[_rot][1] >> 2*i & 0x3

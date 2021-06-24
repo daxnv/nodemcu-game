@@ -15,8 +15,8 @@ public:
     Piece(int8_t id, IntVec start_pos, int8_t rotation);
     Piece &rotate();
     Piece &move(IntVec by);
-    Piece moved(IntVec by);
-    IntVec operator[](size_t i);
+    Piece moved(IntVec by) const;
+    IntVec operator[](size_t i) const;
     uint16_t color() const;
 private:
     int8_t _id;
