@@ -14,9 +14,6 @@ public:
     void levelUp();
     void loop();
     void go();
-    void printB() {
-        printBoard(_board);
-    }
 
 private:
     class Input {
