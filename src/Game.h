@@ -14,8 +14,11 @@ public:
     void levelUp();
     void loop();
     void go();
+    void printB() {
+        printBoard(_board);
+    }
 
-protected:
+private:
     class Input {
     public:
         Input();
@@ -36,18 +39,18 @@ protected:
     Board _board;
     int _points, _counter;
     static constexpr int _start_pos = Board::width / 2;
-};
 
-class Output : public Game {
-public:
-    Output();
+    //Display part
     void draw();
     void drawBlock(IntVec at, uint32_t color);
     void drawPiece(Piece piece);
 
-private:
-    static constexpr size_t width = 240;
-    static constexpr size_t height = 340;
+    class Display {
+    public:
+        static constexpr size_t width = 240;
+        static constexpr size_t height = 340;
+    };
+
     static constexpr int block_size = 2;
     TFT_eSPI tft;
 };
