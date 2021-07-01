@@ -25,8 +25,10 @@ void Game::cycleDown() {
     if (_board.collision(moved_piece)) {
         levelUp();
     } else {
+        clearPiece(_piece);
         _piece = moved_piece;
     }
+    drawPiece(_piece);
 }
 
 void Game::levelUp() {
@@ -49,7 +51,9 @@ void Game::cycleUser() {
     shift[0] = _controller.shift();
     changed_piece.move(shift);
 
+    clearPiece(_piece);
     if (!_board.collision(changed_piece)) _piece = changed_piece;
+    drawPiece(_piece);
 }
 
 using Clock = esp8266::polledTimeout::periodicFastMs;
@@ -62,8 +66,8 @@ void Game::loop() {
             if (user_cycle) {
               _controller.measure();
               cycleUser();
-              draw();
             }
+            yield();
         }
         down_cycle.reset(1000 - _counter);
         cycleDown();
@@ -104,21 +108,11 @@ bool Game::Input::rotation() {
 Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }
 Piece Game::moveToStart(Piece &&piece) { return piece.move({_start_pos, 0}); }
 
-void Game::draw() {
-    for (int y = 0; y < _board.height; ++y) {
-        for (int x = 0; x < _board.width; ++x) {
-            drawBlock({x,y}, _board.at({x,y}).color()/*richtige Reihenfolge*/);
-        }
-        yield();
-    }
-    drawPiece(_piece);
-}
-
 void Game::drawBlock(IntVec at, uint32_t color) {
     static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
     for (int dx = 0; dx < block_size; ++dx) {
         for (int dy = 0; dy < block_size; ++dy) {
-            tft.drawPixel(left_bound + at[0] + dx, at[1] + dy, color);
+            tft.drawPixel(left_bound + at[0] * block_size + dx, at[1] * block_size + dy, color);
         }
     }
 }
@@ -126,5 +120,11 @@ void Game::drawBlock(IntVec at, uint32_t color) {
 void Game::drawPiece(Piece piece) {
     for (int i = 0; i < 4; ++i) {
         drawBlock(piece[i], piece.color());
+    }
+}
+
+void Game::clearPiece(Piece piece) {
+    for (int i = 0; i < 4; ++i) {
+        drawBlock(piece[i], TFT_BLACK);
     }
 }

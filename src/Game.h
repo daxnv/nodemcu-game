@@ -38,9 +38,9 @@ private:
     static constexpr int _start_pos = Board::width / 2;
 
     //Display part
-    void draw();
     void drawBlock(IntVec at, uint32_t color);
     void drawPiece(Piece piece);
+    void clearPiece(Piece piece);
 
     class Display {
     public:
