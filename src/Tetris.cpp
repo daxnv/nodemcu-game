@@ -59,8 +59,9 @@ void Board::addPiece(const Piece &piece) {
 bool Board::isFull() const {
     auto line_full = [](const Line &line) { //gibt nicht zurück ob Zeile ganz voll, sondern
         return any_of(line.begin(), line.end(), //ob ein Block der Zeile
-                      [](const Block &block) {return !block.empty();} //nicht leer ist
+                      [](Block block) {return !block.empty();} //nicht leer ist
         );
     };
-    return any_of(_board.rend(), _board.rend()+2, line_full);
+
+    return any_of(_board.begin(), _board.begin()+2, line_full);
 }
