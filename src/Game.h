@@ -48,7 +48,7 @@ private:
         static constexpr size_t height = 340;
     };
 
-    static constexpr int block_size = 2;
+    static constexpr int block_size = 5;
     TFT_eSPI tft;
 };
 

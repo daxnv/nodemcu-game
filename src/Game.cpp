@@ -109,15 +109,16 @@ void Game::draw() {
         for (int x = 0; x < _board.width; ++x) {
             drawBlock({x,y}, _board.at({x,y}).color()/*richtige Reihenfolge*/);
         }
+        yield();
     }
     drawPiece(_piece);
 }
 
 void Game::drawBlock(IntVec at, uint32_t color) {
-    //static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
+    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
     for (int dx = 0; dx < block_size; ++dx) {
         for (int dy = 0; dy < block_size; ++dy) {
-            tft.drawPixel(at[0] + dx, at[1] + dy, color);
+            tft.drawPixel(left_bound + at[0] + dx, at[1] + dy, color);
         }
     }
 }
