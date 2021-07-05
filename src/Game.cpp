@@ -57,10 +57,10 @@ void Game::cycleUser() {
 }
 
 using Clock = esp8266::polledTimeout::periodicFastMs;
-Clock user_cycle(31);  // 1/32 = 0.03125
+Clock user_cycle(62);  // 1/32 = 0.03125
 
 void Game::loop() {
-    Clock down_cycle(1000);
+    Clock down_cycle(666);
     while (!_board.isFull()) {
         while (!down_cycle) {
             if (user_cycle) {
@@ -69,7 +69,7 @@ void Game::loop() {
             }
             yield();
         }
-        down_cycle.reset(1000 - _counter);
+        down_cycle.reset(666 - _counter);
         cycleDown();
     }
 }
