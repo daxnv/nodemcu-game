@@ -1,6 +1,4 @@
 #include "Tetris.h"
-#include <algorithm>
-#include <TFT_eSPI.h>
 
 using namespace std;
 

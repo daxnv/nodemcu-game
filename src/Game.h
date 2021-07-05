@@ -1,10 +1,8 @@
 #ifndef _GAME_H
 #define _GAME_H
 
-#include "MPU9250.h"
-#include "TFT_eSPI.h"
+#include <MPU9250.h>
 #include "Tetris.h"
-#include "Wire.h"
 
 class Game {
 public:

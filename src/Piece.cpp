@@ -1,5 +1,4 @@
 #include "Piece.h"
-#include <array>
 #include <tuple>
 #include <TFT_eSPI.h>
 

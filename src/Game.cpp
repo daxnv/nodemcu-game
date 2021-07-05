@@ -2,7 +2,7 @@
 
 #include <PolledTimeout.h>
 #include <SPI.h>
-#include <TFT_eSPI.h>
+#include <Wire.h>
 
 using namespace std;
 

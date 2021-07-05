@@ -1,10 +1,8 @@
 #ifndef _TETRIS_H
 #define _TETRIS_H
 
-#include <cstdint>
-#include <array>
-#include "Piece.h"
 #include <TFT_eSPI.h>
+#include "Piece.h"
 
 class Block {
 public:
