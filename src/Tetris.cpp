@@ -31,13 +31,13 @@ Block Board::getAt(IntVec at) const {
 int Board::deleteLines() {
     auto line_full = [](const Line &line) {
         return all_of(line.begin(), line.end(),
-                      [](const Block &block) {return !block.empty();}
+                      [](Block block) {return !block.empty();}
         );
     };
-    auto new_end = remove_if(_board.begin(), _board.end(), line_full);
-    fill(new_end, _board.end(), Line());
+    auto new_rend = remove_if(_board.rbegin(), _board.rend(), line_full);
+    fill(new_rend, _board.rend(), Line());
 
-    return _board.end() - new_end;
+    return _board.rend() - new_rend;
 }
 
 bool Board::collision(const Piece &piece) const {
