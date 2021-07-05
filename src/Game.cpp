@@ -35,6 +35,7 @@ void Game::levelUp() {
     _board.addPiece(_piece);
 
     int n = _board.deleteLines();
+    if (n > 0) drawBoard();
     _points += n * n;
     ++_level;
 
@@ -127,5 +128,13 @@ void Game::drawPiece(Piece piece) {
 void Game::clearPiece(Piece piece) {
     for (int i = 0; i < 4; ++i) {
         drawBlock(piece[i], TFT_BLACK);
+    }
+}
+
+void Game::drawBoard() {
+    for (int y = 0; y < Board::height; ++y) {
+        for (int x = 0; x < Board::width; ++x) {
+            drawBlock({x,y}, _board.at({x,y}).color());
+        }
     }
 }

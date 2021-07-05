@@ -39,6 +39,7 @@ private:
     void drawBlock(IntVec at, uint32_t color);
     void drawPiece(Piece piece);
     void clearPiece(Piece piece);
+    void drawBoard();
 
     class Display {
     public:
