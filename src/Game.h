@@ -32,7 +32,7 @@ private:
     Input _controller;
     Piece _piece, _preview;
     Board _board;
-    int _points, _counter;
+    int _points, _level;
     static constexpr int _start_pos = Board::width / 2;
 
     //Display part

@@ -12,7 +12,7 @@ Game::Game() :
     _preview(random_piece()),
     _board(),
     _points(0),
-    _counter(0),
+    _level(0),
     tft()
 {
     tft.init();
@@ -36,7 +36,7 @@ void Game::levelUp() {
 
     int n = _board.deleteLines();
     _points += n * n;
-    ++_counter;
+    ++_level;
 
     _piece = moveToStart(_preview);
     _preview = random_piece();
@@ -60,7 +60,8 @@ using Clock = esp8266::polledTimeout::periodicFastMs;
 Clock user_cycle(62);  // 1/32 = 0.03125
 
 void Game::loop() {
-    Clock down_cycle(666);
+    static constexpr int initial_speed = 666;
+    Clock down_cycle(initial_speed);
     while (!_board.isFull()) {
         while (!down_cycle) {
             if (user_cycle) {
@@ -69,7 +70,7 @@ void Game::loop() {
             }
             yield();
         }
-        down_cycle.reset(666 - _counter);
+        down_cycle.reset(initial_speed - _level);
         cycleDown();
     }
 }
