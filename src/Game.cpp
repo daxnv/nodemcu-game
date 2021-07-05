@@ -58,7 +58,7 @@ void Game::cycleUser() {
 }
 
 using Clock = esp8266::polledTimeout::periodicFastMs;
-Clock user_cycle(62);  // 1/32 = 0.03125
+Clock user_cycle(94);  // 1/32 = 0.03125, 3/32 = 0.09375
 
 void Game::loop() {
     static constexpr int initial_speed = 666;
@@ -67,6 +67,9 @@ void Game::loop() {
         while (!down_cycle) {
             if (user_cycle) {
               _controller.measure();
+              if (_controller.down()) {
+                  break;
+              }
               cycleUser();
             }
             yield();
@@ -85,26 +88,30 @@ Game::Input::Input() : Sensor(Wire, 0x68), last_was_rot(false) {
     Sensor.setSrd(19);                                   // Setzt die Datenrate auf 19, was 50Hz entspricht
 }
 
-void Game::Input::measure() {
-    static constexpr float threshold = -3;
-    last_was_rot = Sensor.getGyroX_rads() < threshold;
-    Sensor.readSensor();
-}
-
 int Game::Input::shift() {
-    static constexpr float threshold = 2;
+    static constexpr float x_threshold = 2;
     float shift = Sensor.getAccelX_mss();
-    if (shift > threshold)
+    if (shift > x_threshold)
         return 1;
-    else if (shift < -threshold)
+    else if (shift < -x_threshold)
         return -1;
     return 0;
 }
 
+static constexpr float rot_threshold = -3;
+void Game::Input::measure() {
+    last_was_rot = Sensor.getGyroX_rads() < rot_threshold;
+    Sensor.readSensor();
+}
+
 bool Game::Input::rotation() {
-    static constexpr float threshold = -3;
-    bool is_rot = Sensor.getGyroX_rads() < threshold;
+    bool is_rot = Sensor.getGyroX_rads() < rot_threshold;
     return last_was_rot && last_was_rot != is_rot;
+}
+
+bool Game::Input::down() {
+    static constexpr float y_threshold = 7;
+    return Sensor.getAccelY_mss() > y_threshold;
 }
 
 Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }

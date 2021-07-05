@@ -20,6 +20,7 @@ private:
         void measure();
         int shift();
         bool rotation();
+        bool down();
 
     private:
         MPU9250 Sensor;
