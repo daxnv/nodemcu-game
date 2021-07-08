@@ -69,9 +69,9 @@ void Game::levelUp() {
     _board.addPiece(_piece);
 
     int n = _board.deleteLines();
-    if (n > 0) drawBoard();
     _points += n * n;
     ++_level;
+    if (n > 0) drawBoard();
 
     _piece = moveToStart(_preview);
     _preview = random_piece();
@@ -167,6 +167,11 @@ void Game::clearPiece(Piece piece) {
 }
 
 void Game::drawBoard() {
+    tft.setCursor(0,0,2);
+    tft.print("Punkte: ");
+    tft.println(_points);
+    tft.print("Level:  ");
+    tft.println(_level);
     for (int y = 0; y < Board::height; ++y) {
         for (int x = 0; x < Board::width; ++x) {
             drawBlock({x,y}, _board.at({x,y}).color());
