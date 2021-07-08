@@ -1,7 +1,6 @@
 #ifndef _GAME_H
 #define _GAME_H
 
-#include <MPU9250.h>
 #include "Tetris.h"
 
 class Game {
@@ -11,7 +10,6 @@ public:
     void cycleUser();
     void levelUp();
     void loop();
-    void go();
 
 private:
     class Input {
@@ -23,7 +21,6 @@ private:
         bool down();
 
     private:
-        MPU9250 Sensor;
         bool last_was_rot;
     };
 
@@ -52,15 +49,6 @@ private:
     TFT_eSPI tft;
 };
 
-#ifdef abs
-#undef abs
-#endif
-
-#include <random>
-
-inline std::default_random_engine eng;
-inline std::uniform_int_distribution<int8_t> from1to7(0, 6);
-
-inline Piece random_piece() { return {from1to7(eng), {0, 0}, 0}; }
+extern Game game;
 
 #endif  //_GAME_H

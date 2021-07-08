@@ -3,8 +3,42 @@
 #include <PolledTimeout.h>
 #include <SPI.h>
 #include <Wire.h>
+#include <MPU9250.h>
 
 using namespace std;
+
+#ifdef abs
+#undef abs
+#endif
+
+#include <random>
+
+uint32_t b(float x) {
+    return *reinterpret_cast<uint32_t*>(&x);
+}
+
+class MPU9250i : public MPU9250 {
+public:
+    MPU9250i() : MPU9250(Wire, 0x68) {
+        Wire.begin(D2,D1);
+        begin();                                      // Sensor wird initialisiert, eine aufwendigere Lösung findet sich in den Beispieldateien der library
+        setAccelRange(MPU9250::ACCEL_RANGE_8G);       // Setzt den Beschleunigungssensor auf den max. Bereich
+        setGyroRange(MPU9250::GYRO_RANGE_500DPS);     // Setzt den Maximalwert düe den Gyrosensor auf +/- 500°/s
+        setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_20HZ); // Setzt einen Filter für Störfreqnezen bei 20Hz
+        setSrd(19);                                   // Setzt die Datenrate auf 19, was 50Hz entspricht
+
+        readSensor();
+    }
+};
+
+inline MPU9250i Sensor;
+
+std::default_random_engine eng(b(Sensor.getAccelX_mss()) ^ b(Sensor.getAccelY_mss()) ^ b(Sensor.getAccelZ_mss()));
+std::uniform_int_distribution<int8_t> from1to7(0, 6);
+
+Piece random_piece() { return {from1to7(eng), {0, 0}, 0}; }
+
+Game game;
 
 Game::Game() :
     _controller(),
@@ -79,13 +113,7 @@ void Game::loop() {
     }
 }
 
-Game::Input::Input() : Sensor(Wire, 0x68), last_was_rot(false) {
-    Wire.begin(D2,D1);
-    Sensor.begin();                                      // Sensor wird initialisiert, eine aufwendigere Lösung findet sich in den Beispieldateien der library
-    Sensor.setAccelRange(MPU9250::ACCEL_RANGE_8G);       // Setzt den Beschleunigungssensor auf den max. Bereich
-    Sensor.setGyroRange(MPU9250::GYRO_RANGE_500DPS);     // Setzt den Maximalwert düe den Gyrosensor auf +/- 500°/s
-    Sensor.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_20HZ); // Setzt einen Filter für Störfreqnezen bei 20Hz
-    Sensor.setSrd(19);                                   // Setzt die Datenrate auf 19, was 50Hz entspricht
+Game::Input::Input() : last_was_rot(false) {
 }
 
 int Game::Input::shift() {
