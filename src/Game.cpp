@@ -63,6 +63,7 @@ void Game::cycleDown() {
         _piece = moved_piece;
     }
     drawPiece(_piece);
+    drawPreview(_preview);
 }
 
 void Game::levelUp() {
@@ -95,6 +96,8 @@ using Clock = esp8266::polledTimeout::periodicFastMs;
 Clock user_cycle(94);  // 1/32 = 0.03125, 3/32 = 0.09375
 
 void Game::loop() {
+    drawInit();
+
     static constexpr int initial_speed = 666;
     Clock down_cycle(initial_speed);
     while (!_board.isFull()) {
@@ -145,15 +148,6 @@ bool Game::Input::down() {
 Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }
 Piece Game::moveToStart(Piece &&piece) { return piece.move({_start_pos, 0}); }
 
-void Game::drawBlock(IntVec at, uint32_t color) {
-    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
-    for (int dx = 0; dx < block_size; ++dx) {
-        for (int dy = 0; dy < block_size; ++dy) {
-            tft.drawPixel(left_bound + at[0] * block_size + dx, at[1] * block_size + dy, color);
-        }
-    }
-}
-
 void Game::drawPiece(Piece piece) {
     for (int i = 0; i < 4; ++i) {
         drawBlock(piece[i], piece.color());
@@ -166,15 +160,51 @@ void Game::clearPiece(Piece piece) {
     }
 }
 
+void Game::drawPreview(Piece piece) {
+    static constexpr size_t left_bound = Display::width - 5 * block_size, upper_bound = block_size;
+    tft.fillRect(left_bound, upper_bound,
+                 4 * block_size, 4 * block_size,
+                 TFT_BLACK);
+    for (int i = 0; i < 4; ++i) {
+        for (int dx = 0; dx < block_size; ++dx) {
+            for (int dy = 0; dy < block_size; ++dy) {
+                tft.drawPixel(left_bound + piece[i][0] * block_size + dx, upper_bound + piece[i][1] * block_size + dy, piece.color());
+            }
+        }
+    }
+}
+
 void Game::drawBoard() {
-    tft.setCursor(0,0,2);
-    tft.print("Punkte: ");
-    tft.println(_points);
-    tft.print("Level:  ");
-    tft.println(_level);
+    drawScore();
     for (int y = 0; y < Board::height; ++y) {
         for (int x = 0; x < Board::width; ++x) {
             drawBlock({x,y}, _board.at({x,y}).color());
         }
     }
+}
+
+void Game::drawScore() {
+    tft.setCursor(0,0,2);
+    tft.print("Punkte: ");
+    tft.println(_points);
+    tft.print("Level:  ");
+    tft.println(_level);
+}
+
+void Game::drawBlock(IntVec at, uint32_t color) {
+    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
+    for (int dx = 0; dx < block_size; ++dx) {
+        for (int dy = 0; dy < block_size; ++dy) {
+            tft.drawPixel(left_bound + at[0] * block_size + dx, at[1] * block_size + dy, color);
+        }
+    }
+}
+
+void Game::drawInit() {
+    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
+    drawScore();
+    drawPreview(_preview);
+    tft.drawRect(left_bound - 1, -1,
+                 Board::width * block_size + 2, Board::height * block_size + 2,
+                 TFT_WHITE);
 }

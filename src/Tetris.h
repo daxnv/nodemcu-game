@@ -17,7 +17,7 @@ private:
 class Board {
 public:
     static constexpr size_t width = 12;
-    static constexpr size_t height = 40;
+    static constexpr size_t height = 21;
     bool collision(const Piece &piece) const;
     int deleteLines();
     void addPiece(const Piece &piece);

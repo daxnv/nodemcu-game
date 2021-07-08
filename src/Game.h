@@ -11,6 +11,12 @@ public:
     void levelUp();
     void loop();
 
+    class Display {
+    public:
+        static constexpr size_t width = 240;
+        static constexpr size_t height = 340;
+    };
+
 private:
     class Input {
     public:
@@ -37,15 +43,12 @@ private:
     void drawBlock(IntVec at, uint32_t color);
     void drawPiece(Piece piece);
     void clearPiece(Piece piece);
+    void drawPreview(Piece piece);
     void drawBoard();
+    void drawScore();
+    void drawInit();
 
-    class Display {
-    public:
-        static constexpr size_t width = 240;
-        static constexpr size_t height = 340;
-    };
-
-    static constexpr int block_size = 5;
+    static constexpr int block_size = 6;
     TFT_eSPI tft;
 };
 
