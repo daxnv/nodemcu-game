@@ -31,7 +31,7 @@ private:
     Piece _piece, _preview;
     Board _board;
     int _points, _level;
-    static constexpr int _start_pos = Board::width / 2;
+    static constexpr int _start_pos = Board::width / 2 - 2;
 
     //Display part
     void drawBlock(IntVec at, uint32_t color);
