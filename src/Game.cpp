@@ -13,10 +13,6 @@ using namespace std;
 
 #include <random>
 
-uint32_t b(float x) {
-    return *reinterpret_cast<uint32_t*>(&x);
-}
-
 class MPU9250i : public MPU9250 {
 public:
     MPU9250i() : MPU9250(Wire, 0x68) {
@@ -31,7 +27,11 @@ public:
     }
 };
 
-inline MPU9250i Sensor;
+MPU9250i Sensor;
+
+uint32_t b(float x) {
+    return *reinterpret_cast<uint32_t*>(&x);
+}
 
 std::default_random_engine eng(b(Sensor.getAccelX_mss()) ^ b(Sensor.getAccelY_mss()) ^ b(Sensor.getAccelZ_mss()));
 std::uniform_int_distribution<int8_t> from1to7(0, 6);
