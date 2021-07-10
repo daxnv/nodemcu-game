@@ -95,10 +95,9 @@ void Game::cycleUser() {
 using Clock = esp8266::polledTimeout::periodicFastMs;
 Clock user_cycle(94);  // 1/32 = 0.03125, 3/32 = 0.09375
 
-void Game::loop() {
+void Game::play() {
     drawInit();
 
-    static constexpr int initial_speed = 666;
     Clock down_cycle(initial_speed);
     while (!_board.isFull()) {
         while (!down_cycle) {
@@ -114,13 +113,15 @@ void Game::loop() {
         down_cycle.reset(initial_speed - _level);
         cycleDown();
     }
+
+    drawOver();
+    while (true) yield();
 }
 
 Game::Input::Input() : last_was_rot(false) {
 }
 
 int Game::Input::shift() {
-    static constexpr float x_threshold = 2;
     float shift = Sensor.getAccelX_mss();
     if (shift > x_threshold)
         return 1;
@@ -129,7 +130,6 @@ int Game::Input::shift() {
     return 0;
 }
 
-static constexpr float rot_threshold = -3;
 void Game::Input::measure() {
     last_was_rot = Sensor.getGyroX_rads() < rot_threshold;
     Sensor.readSensor();
@@ -141,12 +141,11 @@ bool Game::Input::rotation() {
 }
 
 bool Game::Input::down() {
-    static constexpr float y_threshold = 7;
     return Sensor.getAccelY_mss() > y_threshold;
 }
 
-Piece &Game::moveToStart(Piece &piece) { return piece.move({_start_pos, 0}); }
-Piece Game::moveToStart(Piece &&piece) { return piece.move({_start_pos, 0}); }
+Piece &Game::moveToStart(Piece &piece) { return piece.move({start_pos, 0}); }
+Piece Game::moveToStart(Piece &&piece) { return piece.move({start_pos, 0}); }
 
 void Game::drawPiece(Piece piece) {
     for (int i = 0; i < 4; ++i) {
@@ -161,14 +160,13 @@ void Game::clearPiece(Piece piece) {
 }
 
 void Game::drawPreview(Piece piece) {
-    static constexpr size_t left_bound = Display::width - 5 * block_size, upper_bound = block_size;
-    tft.fillRect(left_bound, upper_bound,
-                 4 * block_size, 4 * block_size,
+    tft.fillRect(Preview::left_bound, Preview::upper_bound,
+                 4 * block_size, 2 * block_size,
                  TFT_BLACK);
     for (int i = 0; i < 4; ++i) {
         for (int dx = 0; dx < block_size; ++dx) {
             for (int dy = 0; dy < block_size; ++dy) {
-                tft.drawPixel(left_bound + piece[i][0] * block_size + dx, upper_bound + piece[i][1] * block_size + dy, piece.color());
+                tft.drawPixel(Preview::left_bound + piece[i][0] * block_size + dx, Preview::upper_bound + piece[i][1] * block_size + dy, piece.color());
             }
         }
     }
@@ -192,19 +190,28 @@ void Game::drawScore() {
 }
 
 void Game::drawBlock(IntVec at, uint32_t color) {
-    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
     for (int dx = 0; dx < block_size; ++dx) {
         for (int dy = 0; dy < block_size; ++dy) {
-            tft.drawPixel(left_bound + at[0] * block_size + dx, at[1] * block_size + dy, color);
+            tft.drawPixel(left_bound + at[0] * block_size + dx, upper_bound + at[1] * block_size + dy, color);
         }
     }
 }
 
 void Game::drawInit() {
-    static constexpr size_t left_bound = (Display::width - Board::width * block_size) / 2;
     drawScore();
     drawPreview(_preview);
-    tft.drawRect(left_bound - 1, -1,
+    tft.drawRect(left_bound - 1, upper_bound - 1,
                  Board::width * block_size + 2, Board::height * block_size + 2,
                  TFT_WHITE);
+    tft.drawFastHLine(0, upper_bound - 1, Display::width, TFT_WHITE);
+}
+
+void Game::drawOver() {
+    tft.setTextSize(3);
+    tft.setTextColor(TFT_BLACK, TFT_BLACK);
+    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2 + 2, (Display::height - tft.fontHeight() * 2) / 2 + 2);
+    tft.print("Game over");
+    tft.setTextColor(TFT_WHITE, TFT_WHITE);
+    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2, (Display::height - tft.fontHeight() * 2) / 2);
+    tft.print("Game over");
 }

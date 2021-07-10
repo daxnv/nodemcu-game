@@ -6,5 +6,5 @@ void setup() {
 }
 
 void loop() {
-    game.loop();
+    game.play();
 }
