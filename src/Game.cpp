@@ -70,8 +70,8 @@ void Game::levelUp() {
     _board.addPiece(_piece);
 
     int n = _board.deleteLines();
-    _points += n * n;
-    ++_level;
+    _level += n;
+    _points += n * n * (_level / speed_c + 1);
     if (n > 0) drawBoard();
 
     _piece = moveToStart(_preview);
@@ -110,7 +110,7 @@ void Game::play() {
             }
             yield();
         }
-        down_cycle.reset(initial_speed - _level);
+        down_cycle.reset(initial_speed - _level * speed_c);
         cycleDown();
     }
 

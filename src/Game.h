@@ -23,7 +23,7 @@ public:
     public:
         static constexpr size_t left_bound = Display::width - 5 * block_size, upper_bound = block_size;
     };
-    static constexpr int initial_speed = 666;
+    static constexpr int initial_speed = 666, speed_c = 5;
 
 private:
     class Input {
