@@ -11,6 +11,7 @@ public:
     void levelUp();
     void play();
 
+private:
     class Display {
     public:
         static constexpr size_t width = 240;
@@ -25,7 +26,6 @@ public:
     };
     static constexpr int initial_speed = 666, speed_c = 5;
 
-private:
     class Input {
     public:
         Input();
@@ -34,10 +34,11 @@ private:
         bool rotation();
         bool down();
 
+    private:
         static constexpr float y_threshold = 7;
         static constexpr float x_threshold = 2;
         static constexpr float rot_threshold = -2.5;
-    private:
+
         bool last_was_rot;
     };
 
