@@ -15,7 +15,7 @@ private:
     class Display {
     public:
         static constexpr size_t width = 240;
-        static constexpr size_t height = 340;
+        static constexpr size_t height = 320;
     };
     static constexpr int start_pos = Board::width / 2 - 2;
     static constexpr int block_size = 8;
