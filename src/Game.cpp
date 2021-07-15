@@ -209,9 +209,9 @@ void Game::drawInit() {
 void Game::drawOver() {
     tft.setTextSize(3);
     tft.setTextColor(TFT_BLACK, TFT_BLACK);
-    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2 + 2, (Display::height - tft.fontHeight() * 2) / 2 + 2);
+    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2 + 2, (Display::height - tft.fontHeight()) / 2 + 2);
     tft.print("Game over");
     tft.setTextColor(TFT_WHITE, TFT_WHITE);
-    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2, (Display::height - tft.fontHeight() * 2) / 2);
+    tft.setCursor((Display::width - tft.textWidth("Game over")) / 2, (Display::height - tft.fontHeight()) / 2);
     tft.print("Game over");
 }
